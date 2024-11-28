@@ -1,7 +1,6 @@
 "use strict";
 
 const express = require("express");
-const { type } = require("os");
 const app = express();
 
 // Cm4_1.1.
@@ -47,6 +46,33 @@ app.get("/math/power/:base/:exponent", (req, res) => {
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
+});
+
+// Cm4_2.1.
+const fs = require("fs");
+function readDataBase() {
+  const dataBase = JSON.parse(fs.readFileSync("data.json", "utf8"));
+  return dataBase;
+}
+
+app.get("/jokebook/categories", (req, res) => {
+  const data = readDataBase();
+  const categories = data.categories;
+  res.json(categories);
+});
+
+app.get("/jokebook/joke/:category", (req, res) => {
+  const data = readDataBase();
+  const category = req.params.category;
+
+  if (!data.categories.includes(category)) {
+    res.status(404).json({ error: `No jokes for category [${category}]` });
+    return;
+  }
+  const jokes = data.jokes[category];
+  const randomIndex = Math.floor(Math.random() * jokes.length);
+  const randomJoke = jokes[randomIndex];
+  res.json(randomJoke);
 });
 
 const PORT = process.env.PORT || 3000;
