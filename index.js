@@ -11,7 +11,14 @@ app.get("/math/circle/:r", (req, res) => {
   res.json({ area: area.toFixed(2), circumference: circumference.toFixed(2) });
 });
 
-//TODO2
+// Cm4_1.2.
+app.get("/math/rectangle/:a/:b", (req, res) => {
+  let a = parseFloat(req.params.a);
+  let b = parseFloat(req.params.b);
+  let area = a * b;
+  let perimeter = 2 * (a + b);
+  res.json({ area: area, perimeter: perimeter });
+});
 
 //TODO3
 
